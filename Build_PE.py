@@ -2,26 +2,26 @@ import numpy as np
 
 
 def Build_PE(L): # L = length of chain (to be random by nature)
-    #Function: Builds a model Polyethylene in the x-direction. Returns atomic position (XYZ) and element.
+    #Function: Builds a model Polyethylene in the x-direction. Returns atomic position (XYZ) and element of each atom.
 
     #c-c-c angle
     cca = (180-109.5)*np.pi/180 /2
 
-    #Define rotation matrix where normal plane lies in the z-axis. The polyethylene chain extends via x-axis.
+    #Define rotation matrix where normal plane lies in the z-axis. The polyethylene chain extends via x-axis and displaced on the y-axis
 
-    R = np.array([[np.cos(cca), np.sin(cca), 0],
+    R_C = np.array([[np.cos(cca), np.sin(cca), 0],
                    [-np.sin(cca), np.cos(cca), 0],
                    [0,            0,           1]])
 
     #Define mirror matrix - H positions flip per chain basis.
 
-    R90 = np.array([[0, 1, 0],
+    R_mirrorH = np.array([[0, 1, 0],
                    [-1, 0, 0],
                    [0, 0, 1]])
 
     #H rotation out of plane 60 degrees up/down.
 
-    Rh = np.array([[1,            0,                 0],
+    R_planeH = np.array([[1,            0,                 0],
                    [0, np.cos(np.pi/3), np.sin(np.pi/3)],
                    [0, -np.sin(np.pi/3), np.cos(np.pi/3)]])
 
@@ -50,19 +50,19 @@ def Build_PE(L): # L = length of chain (to be random by nature)
     i = 3 #Counter for number of atoms
     while len(atom_position) < L*3:
         i += 1
-        R = np.transpose(R) #fluctuating rotation matrix per CH2 subgroup.
-        R90 = np.transpose(R90)
-        atom_position.append(np.array(atom_position[-3] + CCL * np.dot(R, chainvec)))
-        atom_type.append('C') #C
+        R_C = np.transpose(R_C) #fluctuating rotation matrix per CH2 subgroup.
+        R_mirrorH = np.transpose(R_mirrorH) 
+        atom_position.append(np.array(atom_position[-3] + CCL * np.dot(R_C, chainvec)))
+        atom_type.append('C')
 
         i +=1 #H1
-        R90_chainvec = np.dot(R90,chainvec)
-        atom_position.append(np.array(atom_position[-1] + CHL * np.dot(Rh, R90_chainvec)))
+        R_mH_chainvec = np.dot(R_mirrorH,chainvec)
+        atom_position.append(np.array(atom_position[-1] + CHL * np.dot(R_planeH, R_mH_chainvec)))
         atom_type.append('H')
 
         i+=1 #H2
-        R90_chainvec = np.dot(R90, chainvec)
-        atom_position.append(np.array(atom_position[-2] + CHL * np.dot(np.transpose(Rh), R90_chainvec)))
+        R_mH_chainvec = np.dot(R_mirrorH, chainvec)
+        atom_position.append(np.array(atom_position[-2] + CHL * np.dot(np.transpose(R_planeH), R_mH_chainvec)))
         atom_type.append('H')
 
     return [atom_position, atom_type]
