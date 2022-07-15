@@ -1,3 +1,5 @@
+#CURRENT IMPLEMENTATION WORKS ONLY WITH A FIXED BOX. RANDOM BOX IMPLEMENTATION TO COME SOON.
+
 import random as rn
 import numpy as np
 import Build_PE as BP
