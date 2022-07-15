@@ -1,25 +1,44 @@
-#CURRENT IMPLEMENTATION WORKS ONLY WITH A FIXED BOX. RANDOM BOX IMPLEMENTATION TO COME SOON.
-
-import random as rn
 import numpy as np
 import Build_PE as BP
 
-def Build_Fixedbox(N, atom_position): #N = number of PE molecules to be placed inside.
-    #Function: Builds a fixed box with a=length of chain,b,c,alpha=90,beta=90,gamma=90
-    #The box has a boundary condition in all 3 axis.
-    print ("sdfs")
 
-    volume = len(atom_position)/3 * 20 #General rule of thumb for organic molecules is 20 x no non-H atoms -  estimated
+def Build_Randombox(all_chain_L, num_C):
+    #all_chain_L, a list containing the x-lengths of all chains to be placed into box.
+    #Function: Builds a fixed box with a=length of chain,b,c,alpha=90,beta=90,gamma=90
+    #The box has a boundary condition in all 3 axis. Volume of box scales linearly with N.
+    #Note that the scaling of a is independent of N - this is because all C backbones are defined to the x-axis.
+
+    volume =  len(all_chain_L) * 18 * sum(num_C) #General rule of thumb for organic molecules is 18 x no non-H atoms -  estimated
                                        # volume in Angstrom3
 
-    #set a vector as equal to x-position of last carbon
-    a = atom_position[-3][0]
-    b = np.sqrt(volume/a) # b = c
-    alpha = 90 #alpha = beta = gamma
+    #set a vector as equal to average chain length of each carbon polymer fragment
+    a = sum(all_chain_L)/len(all_chain_L)
 
-    return a,b,alpha
+    #Randomly perturbs the box length in b and c direction by up to 50% in either direction
+    b = np.random.uniform(0.5, 2) * np.sqrt((volume/a))
+    c = np.random.uniform(0.5, 2) * np.sqrt((volume/a))
 
-print (Build_Fixedbox(1, BP.Build_PE(30)[0]))
+    #Randomly perturbs the box angles by up to 50% high or low
+    alpha = np.random.uniform(0.5, 1.5) * 90
+    beta = np.random.uniform(0.5, 1.5) * 90
+    gamma = np.random.uniform(0.5, 1.5) * 90
+
+
+    return a,b,c,alpha,beta,gamma, volume
+
+
+def Acceptability(all_chain_L, num_C):
+    #Function: The generated lattice/box is acceptable if this is passed.
+    #Checks if scalar triple product of the vectors is roughly equal to
+    #the volume of the cell (~10% acceptable deviation).
+    vals = Build_Randombox(all_chain_L, num_C)
+    a,b,c,alpha,beta,gamma, volume= vals[0],vals[1],vals[2],vals[3],vals[4],vals[5], vals[6]
+    pseudo_V = a*b*c*np.sqrt(1+(2*np.cos(alpha)*np.cos(beta)*np.cos(gamma))-(np.cos(alpha)**2) - (np.cos(beta)**2)-(np.cos(gamma)**2))
+    if pseudo_V < 1.1*volume and pseudo_V > 0.90*volume:
+        return True, a, b, c, alpha, beta, gamma
+    else:
+        return False, a, b, c, alpha, beta, gamma
+
 
 
 
