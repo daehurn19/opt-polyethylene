@@ -27,7 +27,7 @@ def Randomise_PE(AP_all_chains, AMP):
                             break
 
                     else:
-                        flag = Ftalse
+                        flag = False
                         New_AP.append(perturbed_j)
                 else:
                     flag = False
