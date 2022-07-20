@@ -11,9 +11,9 @@ def main(N): # Number of chains to create inside box.
     AT_allchains = [] #Atom_types of all N chains, sorted by generation history
     #build N normal polyethylene chains
     for i in range(N):
-        ran_num = np.random.randint(5, 20)
-        AP_allchains.append(Build_PE(2)[0])
-        AT_allchains.append(Build_PE(2)[1])
+        ran_num = np.random.randint(3, 20)
+        AP_allchains.append(Build_PE(ran_num)[0])
+        AT_allchains.append(Build_PE(ran_num)[1])
         all_chain_L.append(AP_allchains[-1][-3][0])
         num_C.append(ran_num)
     print(str(N) + " standardised polyethylene generated.")
@@ -31,7 +31,7 @@ def main(N): # Number of chains to create inside box.
             print("Acceptable box configuration found.")
 
     # then perturb each chain
-    AMP = 2
+    AMP = 1.5
     New_AP_allchains = Randomise_PE(AP_allchains, AMP)
     print(New_AP_allchains)
     print("All polyethylene molecules randomised.")
@@ -39,37 +39,36 @@ def main(N): # Number of chains to create inside box.
     # then place each chain randomly in box # account for PBC
     # Can be done by making sure there is a minimum 1.5A distance from each chain,
     # and all chains stay within the confines of the box dimensions in b and c direction.
-    """AMP = 3
+    AMP = 40
     New_AP_allchains = Randomise_Position(New_AP_allchains, AMP)
-    print (New_AP_allchains)
-    print ("Polyethylene randomly placed within box.")
-"""
+    print("All polyethylene fragments randomly placed within box.")
+
 
     #Now, flatten all lists for output.
     # Use ASE to do this easily.
     #We have both rand_box_dim (dimensions of random box), and New_AP_allchains (coordiantes of randomised polethylene fragments)
 
+    print ("Flattening elements to write...")
     elements = ''
     for s in AT_allchains:
         for t in s:
             elements += t
-    print (len(elements))
+    print ("Success.")
 
+    print("Flattening atom positions to write...")
     flat_AP = []
-    print (len(New_AP_allchains))
-    print (New_AP_allchains)
     for s in New_AP_allchains: #New_ap_allchains = list of np.arrays of 3 elements
         for t in s:
             flat_AP.append(t)
-    print (flat_AP)
-
+    print ("Success.")
 
     atoms = ase.Atoms(elements, np.array(flat_AP), cell=rand_box_dim, pbc=True)
-    ase.io.write(r'C:\Users\daehu\Desktop\polyethylene\test.cell', atoms, format='castep-cell')
+    ase.io.write(r'C:\Users\daehu\OneDrive\Desktop\polyethylene\test.cell', atoms, format='castep-cell')
+    print("Output file has been made. Please run on Visualisation software.")
     return -1
 
 
 
-print(main(3))
+main(10) # 3 chains of L = 5
 
 

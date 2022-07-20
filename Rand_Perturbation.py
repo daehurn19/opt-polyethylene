@@ -41,48 +41,63 @@ def Randomise_Position(AP_all_chains, AMP):
     #Functionally similar to Randomise_PE, but compares between each polyethylene fragment
     #Rather than self-comparison of each atom position with the same fragment atoms
     New_AP_all_chains = []
+    c=0
+    past = np.array([0,0,0])
     for i in AP_all_chains:  # sequentially move through list of N polymer fragment positions
-        for j in i:  # Sequentially move through list of atoms for i polymer.
-            # Checks for C or H (1, 4, 7 .. = C) (2,3, 5,6 .. = H)
-            # Perturb j by AMP
-            flag = True  # True, until perturbed_j successfully appended to new_AP
-            redo = True
-            while flag:
-                if redo:
-                    rand = np.random.uniform(-AMP, AMP, size=(3))
-                perturbed_j = j + rand
+        current_chain = []
 
-                redo = False
-                current_chain = []
+        flag = True
+        while flag:  # turned false only when length of current_chain = length of i
+            rand = np.random.uniform(-AMP, AMP, size=3)
+            redo = False
 
-                if len(New_AP_all_chains) > 0:  # We do not perturb the position of the first chain.
-                    # check through New_Pos (a list of arrays of atom position for each chain)
-                    # for each member of New_Pos, find the highest and lowest values for x,y,z.
-                    # then check that any member of current_chain is not within 1.5A of these values.
+            for j in i: #iterate through all atom positions of a single chain
 
-                    for k in New_AP_all_chains:
-                        #Currently a list of atom positions in New_AP_all_chains
-                        for l in k:
-                            #Currently each atom position...
-                            #Do a comparison with current atom position
-                            if (perturbed_j[0] - l[0]) ** 2 + (perturbed_j[1] - l[1]) ** 2 + (
-                                    perturbed_j[2] - l[2]) ** 2 < 1.5 ** 2:
+                perturbed_j = j + rand + past
+
+                # check if NewAPallchains is empty - if so, fill current chain and add to newallchains
+                if len(New_AP_all_chains) > 0:
+
+                    # check, that current_chain for EACH CHAIN, does not overlap its atoms with any of their atoms.
+                    for chain in New_AP_all_chains:
+                        for atom in chain:
+                            if (perturbed_j[0] - atom[0])**2 + (perturbed_j[1] - atom[1])**2 + (perturbed_j[2] - atom[2])**2 < 1.5**2:
+                                current_chain = []
+
                                 redo = True
+                                # if overlaps, then break out of for loops before satisfying the below if statement.
                                 break
+
                         else:
-                            current_chain.append(perturbed_j)
                             continue
 
                         break
-                    flag = False
 
+                    if redo == True:
+                        break
+
+                    else:
+                        current_chain.append(perturbed_j)
 
                 else:
-                    current_chain.append(j) # If nothing in allchain
-                New_AP_all_chains.append(current_chain)
+                    # fill current chain with all j, non-perturbed. should repeat until end of i=0 (first chain).
+                    current_chain.append(j)
 
-            #   print ("Successfully translated chain position without conflict.")
+
+
+
+            if len(current_chain) == len(i):
+                c +=1
+                New_AP_all_chains.append(current_chain)
+                current_chain = [] #resets current_chain
+                flag = False
+                past = perturbed_j
+                print ("Chain " + str(c) + " placed in box.")
+
 
     return New_AP_all_chains
+
+
+
 
 
