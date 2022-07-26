@@ -53,7 +53,10 @@ def Randomise_Position(AP_all_chains, AMP):
 
             for j in i: #iterate through all atom positions of a single chain
 
-                perturbed_j = j + rand + past
+                perturbed_j = np.array([0,0,0])
+                perturbed_j[0] = j[0]
+                perturbed_j[1] = j[1] + rand[1] + past[1]
+                perturbed_j[2] = j[2] + rand[2] + past[2]
 
                 # check if NewAPallchains is empty - if so, fill current chain and add to newallchains
                 if len(New_AP_all_chains) > 0:

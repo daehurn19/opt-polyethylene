@@ -50,13 +50,12 @@ def Build_PE(L): # L = length of chain (to be random by nature)
     i = 3 #Counter for number of atoms
     while len(atom_position) < L*3:
         i += 1
-        R_C = np.transpose(R_C) #fluctuating rotation matrix per CH2 subgroup.
-        R_mirrorH = np.transpose(R_mirrorH) 
+
         atom_position.append(np.array(atom_position[-3] + CCL * np.dot(R_C, chainvec)))
         atom_type.append('C')
 
         i +=1 #H1
-        R_mH_chainvec = np.dot(R_mirrorH,chainvec)
+        R_mH_chainvec = np.dot(R_mirrorH, chainvec)
         atom_position.append(np.array(atom_position[-1] + CHL * np.dot(R_planeH, R_mH_chainvec)))
         atom_type.append('H')
 
@@ -64,6 +63,9 @@ def Build_PE(L): # L = length of chain (to be random by nature)
         R_mH_chainvec = np.dot(R_mirrorH, chainvec)
         atom_position.append(np.array(atom_position[-2] + CHL * np.dot(np.transpose(R_planeH), R_mH_chainvec)))
         atom_type.append('H')
+
+        R_C = np.transpose(R_C)  # fluctuating rotation matrix per CH2 subgroup.
+        R_mirrorH = np.transpose(R_mirrorH)
 
     return [atom_position, atom_type]
 

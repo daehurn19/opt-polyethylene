@@ -2,21 +2,33 @@ import numpy as np
 from Build_PE import Build_PE
 from Build_randbox import Acceptability
 from Rand_Perturbation import Randomise_PE, Randomise_Position
-import ase, ase.io
+import ase, ase.io, ase.visualize
+from Rotate_chain import Rotator
 
-def main(N): # Number of chains to create inside box.
+
+def main(N, L, rot=False):
+
+    #Input: N = Number of chains to be created
+    #       L = C Length of the polyethylene chain
+    #       rot = True/False for random rotation of each polyethylene chain, Defaults to False
+
+    #Output variables
     all_chain_L = []
     num_C = []
     AP_allchains = [] #Atom_positions of all N chains, sorted by generation history
     AT_allchains = [] #Atom_types of all N chains, sorted by generation history
-    #build N normal polyethylene chains
+    total_atoms = 0
+
+
+    #Build N normal polyethylene chains
     for i in range(N):
-        ran_num = np.random.randint(3, 20)
-        AP_allchains.append(Build_PE(ran_num)[0])
-        AT_allchains.append(Build_PE(ran_num)[1])
+        AP_allchains.append(Build_PE(L)[0])
+        AT_allchains.append(Build_PE(L)[1])
         all_chain_L.append(AP_allchains[-1][-3][0])
-        num_C.append(ran_num)
+        num_C.append(L)
+        total_atoms += L*3
     print(str(N) + " standardised polyethylene generated.")
+    print("Total expected atoms = " + str(total_atoms))
 
     # then build random box to contain chains
     flag = True
@@ -30,18 +42,34 @@ def main(N): # Number of chains to create inside box.
                 rand_box_dim.append(acceptable[i+1])
             print("Acceptable box configuration found.")
 
+    new_AP_allchains = []
+
+    if rot:
+        for i in AP_allchains:
+            new_AP_allchains.append(Rotator(i))
+
+        print(AP_allchains)
+        print(new_AP_allchains)
+
+    else:
+        new_AP_allchains = AP_allchains
+
+    """
     # then perturb each chain
-    AMP = 1.5
+    AMP = 1
     New_AP_allchains = Randomise_PE(AP_allchains, AMP)
     print(New_AP_allchains)
     print("All polyethylene molecules randomised.")
+    
 
     # then place each chain randomly in box # account for PBC
     # Can be done by making sure there is a minimum 1.5A distance from each chain,
     # and all chains stay within the confines of the box dimensions in b and c direction.
-    AMP = 40
-    New_AP_allchains = Randomise_Position(New_AP_allchains, AMP)
+
+    AMP = 10
+    new_AP_allchains = Randomise_Position(new_AP_allchains, AMP)
     print("All polyethylene fragments randomly placed within box.")
+    """
 
 
     #Now, flatten all lists for output.
@@ -57,18 +85,19 @@ def main(N): # Number of chains to create inside box.
 
     print("Flattening atom positions to write...")
     flat_AP = []
-    for s in New_AP_allchains: #New_ap_allchains = list of np.arrays of 3 elements
+    for s in new_AP_allchains: #New_ap_allchains = list of np.arrays of 3 elements
         for t in s:
             flat_AP.append(t)
     print ("Success.")
 
     atoms = ase.Atoms(elements, np.array(flat_AP), cell=rand_box_dim, pbc=True)
+    ase.visualize.view(atoms)
     ase.io.write(r'C:\Users\daehu\OneDrive\Desktop\polyethylene\test.cell', atoms, format='castep-cell')
     print("Output file has been made. Please run on Visualisation software.")
     return -1
 
 
 
-main(10) # 3 chains of L = 5
+main(10, 5, rot=True) # 3 chains of L = 5
 
 
