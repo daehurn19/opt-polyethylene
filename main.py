@@ -4,6 +4,7 @@ from Build_randbox import Acceptability
 from Rand_Perturbation import Randomise_PE, Randomise_Position
 import ase, ase.io, ase.visualize
 from Rotate_chain import Rotator
+from ase.io.opls import OPLSStructure, OPLSff
 
 
 def main(N, L, rot=False):
@@ -44,15 +45,22 @@ def main(N, L, rot=False):
 
     new_AP_allchains = []
 
+    rand_box_dim[0]= 2.5
+    rand_box_dim[1] = 2.5
+    rand_box_dim[2] = 2.5
+    rand_box_dim[3] = 90
+    rand_box_dim[4] = 90
+    rand_box_dim[5] = 90
+
+
     if rot:
         for i in AP_allchains:
             new_AP_allchains.append(Rotator(i))
 
-        print(AP_allchains)
-        print(new_AP_allchains)
 
     else:
         new_AP_allchains = AP_allchains
+
 
     """
     # then perturb each chain
@@ -61,16 +69,14 @@ def main(N, L, rot=False):
     print(New_AP_allchains)
     print("All polyethylene molecules randomised.")
     
-
+"""
     # then place each chain randomly in box # account for PBC
     # Can be done by making sure there is a minimum 1.5A distance from each chain,
     # and all chains stay within the confines of the box dimensions in b and c direction.
 
-    AMP = 10
-    new_AP_allchains = Randomise_Position(new_AP_allchains, AMP)
+    a, b, c = rand_box_dim[0], rand_box_dim[1], rand_box_dim[2]
+    new_AP_allchains = Randomise_Position(new_AP_allchains, a, b, c)
     print("All polyethylene fragments randomly placed within box.")
-    """
-
 
     #Now, flatten all lists for output.
     # Use ASE to do this easily.
@@ -90,14 +96,39 @@ def main(N, L, rot=False):
             flat_AP.append(t)
     print ("Success.")
 
-    atoms = ase.Atoms(elements, np.array(flat_AP), cell=rand_box_dim, pbc=True)
+
+    types = []
+    atoms = ase.Atoms(elements, np.array(flat_AP), cell=rand_box_dim, pbc=False)
+
+
+
+    atoms.arrays['molid'] = np.ones(len(atoms),dtype='int')
+
+    [types.append("CT") if x%3 == 0 else types.append("HC") for x in range(len(atoms))]
+    types = np.array(types)
+    atoms.arrays['type'] = types
+
+
     ase.visualize.view(atoms)
-    ase.io.write(r'C:\Users\daehu\OneDrive\Desktop\polyethylene\test.cell', atoms, format='castep-cell')
+    ase.io.write(r'C:\Users\daehu\OneDrive\Desktop\polyethylene\test.xyz', atoms, format='extxyz')
+
     print("Output file has been made. Please run on Visualisation software.")
+
+
+    structure = OPLSStructure(r'C:\Users\daehu\OneDrive\Desktop\polyethylene\test.xyz')
+    ase.visualize.view(structure)
+
+
+
+    with open(r'C:\Users\daehu\OneDrive\Desktop\polyethylene\FF_defs.par') as fd:
+        opls = OPLSff(fd)
+    opls.write_lammps(structure, prefix='lmp')
+
+
     return -1
 
 
 
-main(10, 5, rot=True) # 3 chains of L = 5
+main(1, 2, rot=True) # 3 chains of L = 5
 
 

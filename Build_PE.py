@@ -26,8 +26,8 @@ def Build_PE(L): # L = length of chain (to be random by nature)
                    [0, -np.sin(np.pi/3), np.cos(np.pi/3)]])
 
     #Bond lengths
-    CCL = 1.33
-    CHL = 0.99
+    CCL = 1.54
+    CHL = 1.10
 
     #Output data
     atom_position = []
@@ -35,16 +35,16 @@ def Build_PE(L): # L = length of chain (to be random by nature)
 
 
     #Set chain in x direction:
-    chainvec = np.array([1, 0, 0])
+    chainvec = np.array([1.0, 0.0, 0.0])
 
     #Set initial -CH2 block:
-    atom_position.append(np.array([0,0,0]))
+    atom_position.append(np.array([0.0,0.0,0.0]))
     atom_type.append('C') #C = 1, H = 2
 
-    atom_position.append(np.array([0,CHL*np.cos(np.pi/3), CHL*np.sin(np.pi/3)]))
+    atom_position.append(np.array([0.0,CHL*np.cos(np.pi/3), CHL*np.sin(np.pi/3)]))
     atom_type.append('H')
 
-    atom_position.append(np.array([0, CHL*np.cos(np.pi/3), -CHL*np.sin(np.pi/3)]))
+    atom_position.append(np.array([0.0, CHL*np.cos(np.pi/3), -CHL*np.sin(np.pi/3)]))
     atom_type.append('H')
 
     i = 3 #Counter for number of atoms

@@ -37,26 +37,25 @@ def Randomise_PE(AP_all_chains, AMP):
 
     return New_AP_all_chains
 
-def Randomise_Position(AP_all_chains, AMP):
+def Randomise_Position(AP_all_chains, a, b, c):
     #Functionally similar to Randomise_PE, but compares between each polyethylene fragment
     #Rather than self-comparison of each atom position with the same fragment atoms
     New_AP_all_chains = []
-    c=0
-    past = np.array([0,0,0])
+    count=0
+
     for i in AP_all_chains:  # sequentially move through list of N polymer fragment positions
         current_chain = []
 
         flag = True
         while flag:  # turned false only when length of current_chain = length of i
-            rand = np.random.uniform(-AMP, AMP, size=3)
+            rand_x = np.random.uniform(float(-a/2), float(a/2))
+            rand_y = np.random.uniform(0.0, float(b))
+            rand_z = np.random.uniform(0.0, float(c))
             redo = False
 
             for j in i: #iterate through all atom positions of a single chain
-
-                perturbed_j = np.array([0,0,0])
-                perturbed_j[0] = j[0]
-                perturbed_j[1] = j[1] + rand[1] + past[1]
-                perturbed_j[2] = j[2] + rand[2] + past[2]
+                rand_vector = np.array([rand_x, rand_y, rand_z])
+                perturbed_j = j + rand_vector
 
                 # check if NewAPallchains is empty - if so, fill current chain and add to newallchains
                 if len(New_AP_all_chains) > 0:
@@ -90,12 +89,11 @@ def Randomise_Position(AP_all_chains, AMP):
 
 
             if len(current_chain) == len(i):
-                c +=1
+                count +=1
                 New_AP_all_chains.append(current_chain)
                 current_chain = [] #resets current_chain
                 flag = False
-                past = perturbed_j
-                print ("Chain " + str(c) + " placed in box.")
+                print ("Chain " + str(count) + " placed in box.")
 
 
     return New_AP_all_chains

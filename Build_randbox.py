@@ -32,7 +32,7 @@ def Acceptability(all_chain_L, num_C):
     #Checks if scalar triple product of the vectors is roughly equal to
     #the volume of the cell (~10% acceptable deviation).
     vals = Build_Randombox(all_chain_L, num_C)
-    a,b,c,alpha,beta,gamma, volume= vals[0],vals[1],vals[2],vals[3],vals[4],vals[5], vals[6]
+    a,b,c,alpha,beta,gamma, volume = vals[0],vals[1],vals[2],vals[3],vals[4],vals[5], vals[6]
     pseudo_V = a*b*c*np.sqrt(1+(2*np.cos(alpha)*np.cos(beta)*np.cos(gamma))-(np.cos(alpha)**2) - (np.cos(beta)**2)-(np.cos(gamma)**2))
     if pseudo_V < 1.1*volume and pseudo_V > 0.90*volume:
         return True, a, b, c, alpha, beta, gamma
