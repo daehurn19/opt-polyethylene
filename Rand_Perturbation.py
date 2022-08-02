@@ -48,7 +48,7 @@ def Randomise_Position(AP_all_chains, a, b, c):
 
         flag = True
         while flag:  # turned false only when length of current_chain = length of i
-            rand_x = np.random.uniform(float(-a/2), float(a/2))
+            rand_x = 0.0
             rand_y = np.random.uniform(0.0, float(b))
             rand_z = np.random.uniform(0.0, float(c))
             redo = False

@@ -8,15 +8,16 @@ def Build_Randombox(all_chain_L, num_C):
     #The box has a boundary condition in all 3 axis. Volume of box scales linearly with N.
     #Note that the scaling of a is independent of N - this is because all C backbones are defined to the x-axis.
 
-    volume =  len(all_chain_L) * 2 * sum(num_C) #General rule of thumb for organic molecules is 18 x no non-H atoms -  estimated
+    volume =  len(all_chain_L) * 4 * sum(num_C) #General rule of thumb for organic molecules is 18 x no non-H atoms -  estimated
                                        # volume in Angstrom3
 
     #set a vector as equal to average chain length of each carbon polymer fragment
     a = sum(all_chain_L)/len(all_chain_L)
 
+
     #Randomly perturbs the box length in b and c direction by up to 50% in either direction
-    b = np.random.uniform(0.5, 2) * np.sqrt((volume/a))
-    c = np.random.uniform(0.5, 2) * np.sqrt((volume/a))
+    b = np.random.uniform(1) * np.sqrt((volume/a))* 2
+    c = np.random.uniform(1) * np.sqrt((volume/a))* 2
 
     #Randomly perturbs the box angles by up to 50% high or low
     alpha = np.random.uniform(0.5, 1.5) * 90
