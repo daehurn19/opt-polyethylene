@@ -63,7 +63,7 @@ def Randomise_Position(AP_all_chains, a, b, c):
                     # check, that current_chain for EACH CHAIN, does not overlap its atoms with any of their atoms.
                     for chain in New_AP_all_chains:
                         for atom in chain:
-                            if (perturbed_j[0] - atom[0])**2 + (perturbed_j[1] - atom[1])**2 + (perturbed_j[2] - atom[2])**2 < 1.5**2:
+                            if (perturbed_j[0] - atom[0])**2 + (perturbed_j[1] - atom[1])**2 + (perturbed_j[2] - atom[2])**2 < 2**2:
                                 current_chain = []
 
                                 redo = True

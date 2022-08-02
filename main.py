@@ -11,7 +11,7 @@ from relax import relaxation
 def main(N, L, rot=False):
 
     # Input: N = Number of chains to be created
-    #        L = C Length of the polyethylene chain
+    #        L = C Length of the polyethylene chain - must be even.
     #        rot = True/False for random rotation of each polyethylene chain, Defaults to False
 
     #Output variables
@@ -46,8 +46,7 @@ def main(N, L, rot=False):
 
     new_AP_allchains = []
 
-    rand_box_dim[1] = 50
-    rand_box_dim[2] = 50
+
     rand_box_dim[3] = 90
     rand_box_dim[4] = 90
     rand_box_dim[5] = 90
@@ -137,8 +136,8 @@ for i in range(repeats):
     #N = np.random.randint(2) + 1
     #L = np.random.randint(2) + 2
 
-    N = 10
-    L = 4
+    N = 3
+    L = 8
 
     generate = main(N, L, rot=True) # 3 chains of L = 5
 
