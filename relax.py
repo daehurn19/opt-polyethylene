@@ -26,16 +26,16 @@ def relaxation(data_file):
         optimizer = LBFGSLineSearch(ecf)
         optimizer.run(1e-3, 5000)
         # If converged, output final structure and fake castep file
-        """
+        
         if optimizer.converged():    
-            ase.io.write(seed + '-out.xyz', atoms, 'extxyz')
+            ase.io.write('poly-out.xyz', atoms, 'extxyz')
             volume = atoms.get_volume()
             pv = pressure*to_eV_per_A3 * volume
             enthalpy = atoms.get_potential_energy() + pv
-            with open(seed + '.castep', 'w') as f:
+            with open('poly.castep', 'w') as f:
                 f.write("Current cell volume = {:25.15f} A**3\n".format(volume))
                 f.write("*  Pressure:   {:25.15f}\n".format(pressure))
                 f.write("Python: Final Enthalpy     = {:25.15f} eV\n".format(enthalpy))
                 
                 
-        """
+        
