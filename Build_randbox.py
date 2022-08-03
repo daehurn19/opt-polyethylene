@@ -14,12 +14,13 @@ def Build_Randombox(all_chain_L, num_C):
 
     print (all_chain_L)
     #set a vector as equal to average chain length of each carbon polymer fragment
-    a = sum(all_chain_L)/len(all_chain_L) + (sum(all_chain_L)/len(all_chain_L))/(sum(num_C)/len(num_C))
+    a = sum(all_chain_L)/len(all_chain_L) + 1.258 # L carbon propogated in x axis
+
 
 
     #Randomly perturbs the box length in b and c direction by up to 50% in either direction
-    b = np.random.uniform(1) * np.sqrt((volume/a))
-    c = np.random.uniform(1) * np.sqrt((volume/a))
+    b = np.sqrt((volume/a)) + 1.5
+    c = np.sqrt((volume/a)) + 1.5
 
     #Randomly perturbs the box angles by up to 50% high or low
     alpha = np.random.uniform(0.5, 1.5) * 90
@@ -40,6 +41,7 @@ def Acceptability(all_chain_L, num_C):
     if pseudo_V < 1.1*volume and pseudo_V > 0.90*volume:
         return True, a, b, c, alpha, beta, gamma
     else:
+        
         return False, a, b, c, alpha, beta, gamma
 
 

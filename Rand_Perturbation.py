@@ -41,7 +41,7 @@ def Randomise_Position(AP_all_chains, a, b, c):
     #Functionally similar to Randomise_PE, but compares between each polyethylene fragment
     #Rather than self-comparison of each atom position with the same fragment atoms
     New_AP_all_chains = []
-    count=0
+    count = 0
 
     for i in AP_all_chains:  # sequentially move through list of N polymer fragment positions
         current_chain = []
@@ -49,8 +49,8 @@ def Randomise_Position(AP_all_chains, a, b, c):
         flag = True
         while flag:  # turned false only when length of current_chain = length of i
             rand_x = 0.0
-            rand_y = np.random.uniform(0.0, float(b))
-            rand_z = np.random.uniform(0.0, float(c))
+            rand_y = np.random.uniform(1.5, float(b) - 2.5)
+            rand_z = np.random.uniform(1.5, float(c) - 2.5)
             redo = False
 
             for j in i: #iterate through all atom positions of a single chain
