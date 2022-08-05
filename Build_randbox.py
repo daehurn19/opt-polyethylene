@@ -11,8 +11,6 @@ def Build_Randombox(all_chain_L, num_C):
     volume =  len(all_chain_L) * 18 * sum(num_C) #General rule of thumb for organic molecules is 18 x no non-H atoms -  estimated
                                        # volume in Angstrom3
 
-
-    print (all_chain_L)
     #set a vector as equal to average chain length of each carbon polymer fragment
     a = sum(all_chain_L)/len(all_chain_L) + 1.258 # L carbon propogated in x axis
 

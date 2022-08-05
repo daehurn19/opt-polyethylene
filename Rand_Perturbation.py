@@ -49,8 +49,8 @@ def Randomise_Position(AP_all_chains, a, b, c):
         flag = True
         while flag:  # turned false only when length of current_chain = length of i
             rand_x = 0.0
-            rand_y = np.random.uniform(1.5, float(b) - 2.5)
-            rand_z = np.random.uniform(1.5, float(c) - 2.5)
+            rand_y = np.random.uniform(0.0, float(b))
+            rand_z = np.random.uniform(0.0, float(c))
             redo = False
 
             for j in i: #iterate through all atom positions of a single chain
