@@ -24,7 +24,7 @@ def relaxation(atoms, pressure=0):
         ecf = ExpCellFilter(atoms, scalar_pressure=0)
         optimizer = LBFGSLineSearch(ecf)
         try:
-            optimizer.run(1e-3, 500)
+            optimizer.run(1e-4, 1000)
         except:
             print("fails")
         # If converged, output final structure and fake castep file

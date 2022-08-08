@@ -1,7 +1,7 @@
 import numpy as np
 
 
-def Build_PE(L): # L = length of chain (to be random by nature)
+def Build_PE(L, CCL, CHL): # L = length of chain (to be random by nature)
     #Function: Builds a model Polyethylene in the x-direction. Returns atomic position (XYZ) and element of each atom.
 
     #c-c-c angle
@@ -24,10 +24,6 @@ def Build_PE(L): # L = length of chain (to be random by nature)
     R_planeH = np.array([[1,            0,                 0],
                    [0, np.cos(np.pi/3), np.sin(np.pi/3)],
                    [0, -np.sin(np.pi/3), np.cos(np.pi/3)]])
-
-    #Bond lengths
-    CCL = 1.54
-    CHL = 1.10
 
     #Output data
     atom_position = []

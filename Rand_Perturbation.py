@@ -6,8 +6,6 @@ def Randomise_Position(AP_all_chains, b, c):
     #Rather than self-comparison of each atom position with the same fragment atoms
     New_AP_all_chains = []
 
-    #All mirrors are: +0, +b, +c, +bc
-    mirror = []
     count = 0
 
     for i in AP_all_chains:  # sequentially move through list of N polymer fragment positions
