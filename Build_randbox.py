@@ -16,7 +16,7 @@ def Build_Randombox(chain_x, N_carbons, CCL):
     volume = len(chain_x) * 18 * sum(N_carbons) 
 
     # set a vector as equal to average chain length of each carbon polymer fragment
-    a = sum(chain_x)/len(chain_x) + 0.816*CCL # L carbon propagated in x-axis
+    a = sum(chain_x)/len(chain_x) + 0.943*CCL # L carbon propagated in x-axis
 
 
 

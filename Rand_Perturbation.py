@@ -38,10 +38,10 @@ def Randomise_Position(AP_all, b, c):
                     # check, that current_chain for EACH CHAIN, does not overlap its atoms with any of their atoms.
                     for chain in n_AP_all:
                         for atom in chain:
-                            if (perturbed_j[0] - atom[0])**2 + (perturbed_j[1] - atom[1])**2 + (perturbed_j[2] - atom[2])**2 < 1.5**2 \
-                                    or (perturbed_j[0] - atom[0])**2 + (perturbed_j[1] - (atom[1]+b))**2 + (perturbed_j[2] - atom[2])**2 < 1.5**2 \
-                                    or (perturbed_j[0] - atom[0]) ** 2 + (perturbed_j[1] - (atom[1])) ** 2 + (perturbed_j[2] - (atom[2]+c)) ** 2 < 1.5 ** 2 \
-                                    or (perturbed_j[0] - atom[0]) ** 2 + (perturbed_j[1] - (atom[1] + b)) ** 2 + (perturbed_j[2] - (atom[2]+c)) ** 2 < 1.5 ** 2:
+                            if (perturbed_j[0] - atom[0])**2 + (perturbed_j[1] - atom[1])**2 + (perturbed_j[2] - atom[2])**2 < 2**2 \
+                                    or (perturbed_j[0] - atom[0])**2 + (perturbed_j[1] - (atom[1]+b))**2 + (perturbed_j[2] - atom[2])**2 < 2**2 \
+                                    or (perturbed_j[0] - atom[0]) ** 2 + (perturbed_j[1] - (atom[1])) ** 2 + (perturbed_j[2] - (atom[2]+c)) ** 2 < 2 ** 2 \
+                                    or (perturbed_j[0] - atom[0]) ** 2 + (perturbed_j[1] - (atom[1] + b)) ** 2 + (perturbed_j[2] - (atom[2]+c)) ** 2 < 2 ** 2:
 
                                 current_chain = []
 
